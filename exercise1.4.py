@@ -40,19 +40,20 @@ def jacobi_iteration(c_old, max_iter, tol):
 
 
 
-# ##1.4
-# N = 150
-# # eps = 1e-5
-# # max_iter = int(2e4)
-# # omegas = np.linspace(1.7, 2, 100)
-# # Ns = np.linspace(10, 200, 20)
+##1.4
+N = 150
+# eps = 1e-5
+# max_iter = int(2e4)
+# omegas = np.linspace(1.7, 2, 100)
+# Ns = np.linspace(10, 200, 20)
 
-# # per row: i_min, i_max, j_min, j_max # c_old= np.array([[18, 24, 47, 53]])*N/100 # # two_square = np.array([[18, 24, 30, 36],
-# #                        [18, 24, 63, 69]])*N/100
+# per row: i_min, i_max, j_min, j_max # c_old= np.array([[18, 24, 47, 53]])*N/100 # # two_square = np.array([[18, 24, 30, 36],
+#                        [18, 24, 63, 69]])*N/100
 
-# # three_square = np.array([[18, 24, 22, 28],
-# #                          [18, 24, 47, 53],
-# #                          [18, 24, 72, 78]])*N/100
+# three_square = np.array([[18, 24, 22, 28],
+#                          [18, 24, 47, 53],
+#                          [18, 24, 72, 78]])*N/100
 
-# j=jacobi_iteration(c_old, max_iter=1000, tol=1e-5)
-# print(j)···
+
+j=jacobi_iteration(c_old, max_iter=1000, tol=1e-5)
+print(j)···
