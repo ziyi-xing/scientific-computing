@@ -4,7 +4,7 @@ from numba import njit
 import os
 
 # Ensure the figures directory exists
-figures_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../figures'))
+figures_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '../figures'))
 if not os.path.exists(figures_path):
     os.makedirs(figures_path)
 
