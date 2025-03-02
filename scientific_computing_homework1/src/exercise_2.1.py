@@ -2,7 +2,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
 from numba import jit
-from mpl_toolkits.mplot3d import Axes3D  # 导入3D绘图工具
 
 # SOR求解器
 @jit(nopython=True)
@@ -274,24 +273,22 @@ def study_eta_omega_impact(eta_values, omega_values, grid_size=(100, 100), growt
         print(f"{eta:7.2f} | {omega:9.2f} | {avg_iter:20.2f}")
 
     # 将结果转换为二维数组以便绘图
-    omega_grid, eta_grid = np.meshgrid(omega_values, eta_values)  # 交换 eta 和 omega 的顺序
+    eta_grid, omega_grid = np.meshgrid(eta_values, omega_values)  # 交换 eta 和 omega 的顺序
     iteration_grid = np.zeros_like(eta_grid, dtype=float)
 
     for result in results:
         eta, omega, avg_iter = result
         eta_index = eta_values.index(eta)
         omega_index = omega_values.index(omega)
-        iteration_grid[eta_index, omega_index] = avg_iter  # 注意索引顺序
+        iteration_grid[omega_index, eta_index] = avg_iter  # 注意索引顺序
 
-    # 绘制三维曲面图
-    fig = plt.figure(figsize=(10, 6))
-    ax = fig.add_subplot(111, projection='3d')
-    surf = ax.plot_surface(omega_grid, eta_grid, iteration_grid, cmap='viridis', edgecolor='none')  # 交换 X 和 Y 轴
-    fig.colorbar(surf, ax=ax, label='Average SOR Iterations')
-    ax.set_xlabel('Omega (ω)')  # X 轴为 omega
-    ax.set_ylabel('Eta (η)')    # Y 轴为 eta
-    ax.set_zlabel('Average SOR Iterations')
-    ax.set_title('Impact of Omega and Eta on SOR Iterations (3D Surface Plot)')
+    # 绘制等高线图
+    plt.figure(figsize=(10, 6))
+    plt.contourf(eta_grid, omega_grid, iteration_grid, levels=50, cmap='viridis')
+    plt.colorbar(label='Average SOR Iterations')
+    plt.xlabel('Eta (η)')
+    plt.ylabel('Omega (ω)')
+    plt.title('Impact of Eta and Omega on SOR Iterations (Contour Plot)')
     plt.show()
 
 # **保持原代码结构，直接修改动画部分**
