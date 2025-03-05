@@ -1,7 +1,0 @@
-Total commits: 2
-Total ctimes: 1
-Total files: 2
-Total loc: 47
-| Author   |   loc |   coms |   fils |  distribution    |
-|:---------|------:|-------:|-------:|:-----------------|
-| 邢子怡的电脑   |    47 |      2 |      2 | 100.0/ 100/100.0 |
