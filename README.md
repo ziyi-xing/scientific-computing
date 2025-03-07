@@ -26,6 +26,7 @@ git clone https://github.com/ziyi-xing/scientific-computing.git
 cd scientific_computing_homework2/src
 python exercise_2.3.py
 
+```markdown
 ## Dependencies
 
 The scripts require the following Python packages:
