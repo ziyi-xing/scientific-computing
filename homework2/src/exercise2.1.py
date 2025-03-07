@@ -168,26 +168,12 @@ def update_animation(frame, img, history, dla):
     :return: Updated image object.
     """
     nutrient_field, cluster_field = history[frame]
-    
-    # Create a copy of the nutrient field
     image = nutrient_field.copy()
-    
-    # Set cluster points to NaN (to ignore them in the nutrient field plot)
-    image[cluster_field == 1] = np.nan
-    
-    # Plot the nutrient field with viridis colormap
+    image[cluster_field == 1] = 1  # Set cluster points to 1
     img.set_data(image)
-    img.set_cmap("viridis")  # Use viridis for nutrient field
-    img.set_clim(0, 1)  # Set color limits
-
-    # Overlay cluster points in white (fully opaque)
-    cluster_mask = np.ma.masked_where(cluster_field == 0, cluster_field)  # Mask non-cluster points
-    plt.gca().images[-1].set_data(cluster_mask)  # Update the overlay
-    plt.gca().images[-1].set_cmap("binary")  # Use binary colormap (white for 1, black for 0)
-    plt.gca().images[-1].set_alpha(1.0)  # Set alpha to 1.0 for fully opaque
 
     # Update title with eta value
-    ax.set_title(f"Step {frame} with η = {dla.eta}", fontsize=12)  # Add eta value
+    ax.set_title(f"Step {frame} with η = {dla.eta}")  # Add eta value
     fig.canvas.draw_idle()  # Force refresh to ensure title update
 
     # Stop animation when top boundary is reached
@@ -254,14 +240,8 @@ def study_eta_impact(eta_values, grid_size=(100, 100), growth_steps=5000, omega=
         
         # Combine nutrient_field and cluster_field for gradient heatmap
         image = nutrient_field.copy()
-        image[cluster_field == 1] = np.nan  # Set cluster points to NaN
-        
-        # Plot nutrient field with viridis colormap
+        image[cluster_field == 1] = 1  # Set cluster points to 1
         plt.imshow(image, cmap="viridis", vmin=0, vmax=1, extent=[0, grid_size[1], 0, grid_size[0]], origin='upper')
-        
-        # Overlay cluster points in white (fully opaque)
-        cluster_mask = np.ma.masked_where(cluster_field == 0, cluster_field)  # Mask non-cluster points
-        plt.imshow(cluster_mask, cmap="binary", vmin=0, vmax=1, alpha=1.0)  # Use binary colormap (white for 1, black for 0)
         
         # Set title with eta value and step count
         plt.title(f"η = {eta}, Steps = {step}", fontsize=22)
