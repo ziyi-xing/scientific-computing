@@ -13,7 +13,8 @@ This repository contains solutions for assignments in the Scientific Computing c
 
 - `scientific_computing_homework2/`
   - `src/`: Contains Python scripts for the second assignment.
-    - `exercise_2.1.py`: Solution for Set 2, Question 1(Diffusion Limited Aggregation).
+    - `exercise_2.1.py`: Solution for Set 2, Question 1( Diffusion Limited Aggregation).
+    - `exercise_2.2.py`: Solution for Set 2, Question 2 (Monte Carlo simulation of DLA).
     - `exercise_2.3.py`: Solution for Set 2, Question 3 (Gray-Scott model).
   - `figures/`: Stores images and animations generated from simulations.
 
