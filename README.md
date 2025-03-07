@@ -25,8 +25,8 @@ Clone the repository and navigate to the relevant assignment directory. Run the 
 git clone https://github.com/ziyi-xing/scientific-computing.git
 cd scientific_computing_homework2/src
 python exercise_2.3.py
+``` 
 
-```markdown
 ## Dependencies
 
 The scripts require the following Python packages:
@@ -38,3 +38,4 @@ To install the required dependencies, use the following command:
 
 ```bash
 pip install numpy matplotlib
+``` 
