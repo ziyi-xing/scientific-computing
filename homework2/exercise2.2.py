@@ -3,6 +3,9 @@ import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
 from numba import njit
 import os  # Save gif
+import matplotlib
+matplotlib.use('Agg')  # 禁用交互式显示
+
 
 
 class MonteCarloDLA:
@@ -118,35 +121,59 @@ def run_montecarlo(grid, grid_size, ps, max_iter, history):
 
 
 # Test code
+import os
+import matplotlib
+matplotlib.use('Agg')  # Force the use of a non-interactive backend
+import matplotlib.pyplot as plt
+plt.ioff()  # Disable interactive mode
+
 if __name__ == "__main__":
     # Define different ps values
     ps_values = [0.1, 0.5, 0.7, 1]
 
     # Create a directory to save results
     figures_dir = os.path.join(os.path.dirname(__file__), "figures2.2")
-    os.makedirs(figures_dir, exist_ok=True)  # Create the directory if it does not exist
+    os.makedirs(figures_dir, exist_ok=True)
 
+    # Initialize a list to store final frames for combined plot
+    final_frames = []
+
+    # Loop through each ps value to generate animations and collect final frames
     for ps in ps_values:
-        # Initialize the Monte Carlo DLA model
-        dla = MonteCarloDLA(grid_size=(100, 100), ps=ps, max_iter=70500)
-
+        # Initialize the DLA model
+        dla = MonteCarloDLA(grid_size=(100, 100), ps=ps, max_iter=80000)
+        
         # Run the Monte Carlo simulation
         dla.MonteCarlo()
-
-        # Generate animation and get the ani object
+        
+        # Generate animation
         ani = dla.animate()
-
+        
         # Save the animation as a GIF
-        gif_path = os.path.join(figures_dir, f"dla_MCanimation_ps_{ps}.gif")  # Dynamically generate the filename
-        ani.save(gif_path, writer="pillow", fps=15)  # Save as GIF, fps controls the frame rate
-        print(f"Animation saved to {gif_path}")  # Print the path where the GIF is saved
+        gif_path = os.path.join(figures_dir, f"dla_MCanimation_ps_{ps}.gif")
+        ani.save(gif_path, writer="pillow", fps=15)
+        print(f"Animation saved to {gif_path}")
 
-        # Save the final frame as an image
-        final_frame = dla.history[-1][::-1, :]  # Get the final frame
-        final_image_path = os.path.join(figures_dir, f"MC_final_frame_ps_{ps}.png")  # Dynamically generate the filename
-        plt.imshow(final_frame, cmap='viridis', vmin=0, vmax=1, origin='lower')
-        step_when_top_reached = len(dla.history)
-        plt.title(f"ps={ps}, Step={step_when_top_reached}")  # Set the title with ps and step number
-        plt.savefig(final_image_path)  # Save the final frame image
-        plt.close()  # Close the image window
-        print(f"Final frame saved to {final_image_path}")  # Print the path where the final frame is saved
+        # Extract final frame data (do not save individual images)
+        final_frame = dla.history[-1][::-1, :]
+        step = len(dla.history)
+        final_frames.append((final_frame, ps, step))  # Store data for combined plot
+
+    # Generate a 2x2 combined image
+    fig, axes = plt.subplots(2, 2, figsize=(10, 10))
+    #fig.suptitle("Final Frames for Different ps Values", fontsize=16, y=1.02)
+
+    # Loop through the data to populate subplots
+    for i, (frame, ps, step) in enumerate(final_frames):
+        row = i // 2
+        col = i % 2
+        axes[row, col].imshow(frame, cmap='viridis', vmin=0, vmax=1, origin='lower')
+        axes[row, col].set_title(f"ps = {ps}\nSteps = {step}", fontsize=10)
+        axes[row, col].axis('off')  # Hide axes
+
+    # Adjust layout and save
+    plt.tight_layout()
+    combined_path = os.path.join(figures_dir, "MC_final_frames_combined.png")
+    plt.savefig(combined_path, bbox_inches='tight', dpi=150)
+    plt.close()
+    print(f"\nCombined image saved to {combined_path}")
