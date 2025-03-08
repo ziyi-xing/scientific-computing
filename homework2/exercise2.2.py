@@ -141,7 +141,7 @@ if __name__ == "__main__":
     # Loop through each ps value to generate animations and collect final frames
     for ps in ps_values:
         # Initialize the DLA model
-        dla = MonteCarloDLA(grid_size=(100, 100), ps=ps, max_iter=80000)
+        dla = MonteCarloDLA(grid_size=(100, 100), ps=ps, max_iter=0000)
         
         # Run the Monte Carlo simulation
         dla.MonteCarlo()
