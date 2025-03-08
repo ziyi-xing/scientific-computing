@@ -4,7 +4,7 @@ from matplotlib.animation import FuncAnimation
 from numba import njit
 import os  # Save gif
 import matplotlib
-matplotlib.use('Agg')  # 禁用交互式显示
+matplotlib.use('Agg')  # 
 
 
 
