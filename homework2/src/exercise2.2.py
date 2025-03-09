@@ -168,7 +168,7 @@ if __name__ == "__main__":
         row = i // 2
         col = i % 2
         axes[row, col].imshow(frame, cmap='viridis', vmin=0, vmax=1, origin='lower')
-        axes[row, col].set_title(f"ps = {ps}\nSteps = {step}", fontsize=10)
+        axes[row, col].set_title(f"ps = {ps}\n Steps = {step}", fontsize=18)
         axes[row, col].axis('off')  # Hide axes
 
     # Adjust layout and save
