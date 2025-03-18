@@ -116,7 +116,7 @@ def compare_leapfrog_rk45(k, x0, v0, dt, T):
     plt.xlabel("Position (x)", fontsize=20)
     plt.ylabel("Velocity (v)", fontsize=20)
     plt.title("Leapfrog Method", fontsize=22)
-    plt.legend()
+    plt.legend(fontsize=18)
     plt.grid()
 
     # RK45 Phase Space Plot
@@ -126,7 +126,7 @@ def compare_leapfrog_rk45(k, x0, v0, dt, T):
     plt.xlabel("Position (x)", fontsize=20)
     plt.ylabel("Velocity (v)", fontsize=20)
     plt.title("RK45 Method", fontsize=22)
-    plt.legend()
+    plt.legend(fontsize=18)
     plt.grid()
 
     plt.tight_layout()
@@ -149,7 +149,7 @@ def plot_results():
     plt.xlabel("Time (t)", fontsize=13)
     plt.ylabel("Position (x)", fontsize=13)
     plt.title("Position vs. Time for Different k Values", fontsize=15)
-    plt.legend()
+    plt.legend(fontsize=13)
     plt.grid()
     plt.savefig(os.path.join("homework3/figure/figure3.3", "taskI_position_vs_time.png"), dpi=300)  # Save the figure
     plt.show()
@@ -162,7 +162,7 @@ def plot_results():
     plt.xlabel("Time (t)", fontsize=13)
     plt.ylabel("Velocity (v)", fontsize=13)
     plt.title("Velocity vs. Time for Different k Values", fontsize=15)
-    plt.legend()
+    plt.legend(fontsize=13)
     plt.grid()
     plt.savefig(os.path.join("homework3/figure/figure3.3", "taskI_velocity_vs_time.png"), dpi=300)  # Save the figure
     plt.show()
@@ -175,7 +175,7 @@ def plot_results():
     plt.xlabel("Position (x)", fontsize=13)
     plt.ylabel("Velocity (v)", fontsize=13)
     plt.title("Phase Space (v vs. x) for Different k Values", fontsize=15)
-    plt.legend()
+    plt.legend(fontsize=13)
     plt.grid()
     plt.savefig(os.path.join("homework3/figure/figure3.3", "taskI_phase_space.png"), dpi=300)  # Save the figure
     plt.show()
@@ -194,7 +194,7 @@ def plot_results():
     plt.xlabel("Position (x)", fontsize=20)
     plt.ylabel("Velocity (v)", fontsize=20)
     plt.title("Combined Phase Space (v vs. x)", fontsize=22)
-    plt.legend()
+    plt.legend(fontsize=16)
     plt.grid()
     plt.savefig(os.path.join("homework3/figure/figure3.3", "taskJ_combined_phase_space.png"), dpi=300)  # Save the figure
     plt.show()
@@ -207,7 +207,7 @@ def plot_results():
         plt.xlabel("Position (x)", fontsize=20)
         plt.ylabel("Velocity (v)", fontsize=20)
         plt.title(f"Phase Space for ω={omega}", fontsize=22)
-        plt.legend()
+        plt.legend(fontsize=16)
         plt.grid()
         plt.savefig(os.path.join("homework3/figure/figure3.3", f"taskJ_phase_space_omega_{omega}.png"), dpi=300)  # Save the figure
         plt.show()
