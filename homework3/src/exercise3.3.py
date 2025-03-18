@@ -31,20 +31,22 @@ def leapfrog_harmonic_oscillator(k, x0, v0, dt, T):
     t = np.linspace(0, T, N)  # Time array
 
     x = np.zeros(N)
-    v = np.zeros(N)
+    v_half = np.zeros(N)  # Velocity at half-steps
 
     # Initial conditions
     x[0] = x0
-    v_half = v0 - 0.5 * dt * (-k * x0 / m)  # Compute v at t = dt/2 (first half-step)
+    v_half[0] = v0 - 0.5 * dt * (-k * x0 / m)  # Initialize v at t = dt/2
 
     # Leapfrog integration loop
     for n in range(N - 1):
-        x[n + 1] = x[n] + dt * v_half  # Position update at full step
+        x[n + 1] = x[n] + dt * v_half[n]  # Position update at full step
         a_new = -k * x[n + 1] / m  # Compute new acceleration
-        v_half = v_half + dt * a_new  # Velocity update at half-step
-        v[n] = v_half - 0.5 * dt * a_new  # Approximate velocity at integer time steps
+        v_half[n + 1] = v_half[n] + dt * a_new  # Velocity update at half-step
 
-    return t, x, v
+    # Approximate velocity at integer time steps (optional, if needed)
+    v = v_half + 0.5 * dt * (-k * x / m)  # Optional: approximate v at integer steps
+
+    return t, x, v_half  # Return v_half instead of v
 
 # ----------------- Task J: Adding external driving force ----------------- #
 def leapfrog_driven_oscillator(k, A, omega, x0, v0, dt, T):
@@ -61,27 +63,29 @@ def leapfrog_driven_oscillator(k, A, omega, x0, v0, dt, T):
     T     - Total simulation time
 
     Returns:
-    t, x, v - Time, position, and velocity arrays
+    t, x, v_half - Time, position, and velocity (at half-steps) arrays
     """
     m = 1  # Given that mass is 1
     N = int(T / dt)
     t = np.linspace(0, T, N)
 
     x = np.zeros(N)
-    v = np.zeros(N)
+    v_half = np.zeros(N)  # Velocity at half-steps
 
     # Initial conditions
     x[0] = x0
-    v_half = v0 - 0.5 * dt * (-k * x0 / m + A * np.cos(0) / m)  # Initialize v at t = dt/2
+    v_half[0] = v0 - 0.5 * dt * (-k * x0 / m + A * np.cos(0) / m)  # Initialize v at t = dt/2
 
     # Leapfrog integration loop
     for n in range(N - 1):
-        x[n + 1] = x[n] + dt * v_half  # Position update
+        x[n + 1] = x[n] + dt * v_half[n]  # Position update
         a_new = (-k * x[n + 1] + A * np.cos(omega * t[n + 1])) / m  # Acceleration with external force
-        v_half = v_half + dt * a_new  # Velocity update
-        v[n] = v_half - 0.5 * dt * a_new  # Approximate v at integer time steps
+        v_half[n + 1] = v_half[n] + dt * a_new  # Velocity update at half-step
 
-    return t, x, v
+    # Approximate velocity at integer time steps (optional, if needed)
+    v = v_half + 0.5 * dt * (-k * x / m + A * np.cos(omega * t) / m)  # Optional: approximate v at integer steps
+
+    return t, x, v_half  # Return v_half instead of v
 
 # ----------------- Extra Bonus: Compare Leapfrog with RK45 ----------------- #
 def harmonic_oscillator_ode(t, y, k):
@@ -96,7 +100,7 @@ def compare_leapfrog_rk45(k, x0, v0, dt, T):
     Compare Leapfrog method with RK45 for a harmonic oscillator.
     """
     # Leapfrog method
-    t_leapfrog, x_leapfrog, v_leapfrog = leapfrog_harmonic_oscillator(k, x0, v0, dt, T)
+    t_leapfrog, x_leapfrog, v_half_leapfrog = leapfrog_harmonic_oscillator(k, x0, v0, dt, T)
 
     # RK45 method
     sol = solve_ivp(harmonic_oscillator_ode, (0, T), [x0, v0], args=(k,), method='RK45', t_eval=t_leapfrog)
@@ -107,8 +111,8 @@ def compare_leapfrog_rk45(k, x0, v0, dt, T):
 
     # Leapfrog Phase Space Plot
     plt.subplot(1, 2, 1)
-    plt.plot(x_leapfrog[:1000], v_leapfrog[:1000], label='Leapfrog (0-10s)')
-    plt.plot(x_leapfrog[-1000:], v_leapfrog[-1000:], label='Leapfrog (90-100s)')
+    plt.plot(x_leapfrog[:1000], v_half_leapfrog[:1000], label='Leapfrog (0-10s)')
+    plt.plot(x_leapfrog[-1000:], v_half_leapfrog[-1000:], label='Leapfrog (90-100s)')
     plt.xlabel("Position (x)", fontsize=20)
     plt.ylabel("Velocity (v)", fontsize=20)
     plt.title("Leapfrog Method", fontsize=22)
@@ -153,8 +157,8 @@ def plot_results():
     # Task I: Velocity vs. Time
     plt.figure(figsize=(12, 4))
     for k in k_values:
-        t, _, v = leapfrog_harmonic_oscillator(k, x0, v0, dt, T_taskI)
-        plt.plot(t, v, label=f"k={k}")
+        t, _, v_half = leapfrog_harmonic_oscillator(k, x0, v0, dt, T_taskI)
+        plt.plot(t, v_half, label=f"k={k}")
     plt.xlabel("Time (t)", fontsize=13)
     plt.ylabel("Velocity (v)", fontsize=13)
     plt.title("Velocity vs. Time for Different k Values", fontsize=15)
@@ -166,8 +170,8 @@ def plot_results():
     # Task I: Phase Space (v vs. x)
     plt.figure(figsize=(12, 4))
     for k in k_values:
-        t, x, v = leapfrog_harmonic_oscillator(k, x0, v0, dt, T_taskI)
-        plt.plot(x, v, label=f"k={k}")
+        t, x, v_half = leapfrog_harmonic_oscillator(k, x0, v0, dt, T_taskI)
+        plt.plot(x, v_half, label=f"k={k}")
     plt.xlabel("Position (x)", fontsize=13)
     plt.ylabel("Velocity (v)", fontsize=13)
     plt.title("Phase Space (v vs. x) for Different k Values", fontsize=15)
@@ -185,8 +189,8 @@ def plot_results():
     # Task J: Combined Phase Space
     plt.figure(figsize=(8, 6))
     for i, omega in enumerate(omega_values):
-        t, x, v = leapfrog_driven_oscillator(1.0, A, omega, x0, v0, dt, T_taskJ)
-        plt.plot(x, v, color=colors[i], label=f"ω={omega}")
+        t, x, v_half = leapfrog_driven_oscillator(1.0, A, omega, x0, v0, dt, T_taskJ)
+        plt.plot(x, v_half, color=colors[i], label=f"ω={omega}")
     plt.xlabel("Position (x)", fontsize=20)
     plt.ylabel("Velocity (v)", fontsize=20)
     plt.title("Combined Phase Space (v vs. x)", fontsize=22)
@@ -197,9 +201,9 @@ def plot_results():
 
     # Task J: Individual Phase Space for each omega
     for i, omega in enumerate(omega_values):
-        t, x, v = leapfrog_driven_oscillator(1.0, A, omega, x0, v0, dt, T_taskJ)
+        t, x, v_half = leapfrog_driven_oscillator(1.0, A, omega, x0, v0, dt, T_taskJ)
         plt.figure(figsize=(8, 6))
-        plt.plot(x, v, color=colors[i], label=f"ω={omega}")
+        plt.plot(x, v_half, color=colors[i], label=f"ω={omega}")
         plt.xlabel("Position (x)", fontsize=20)
         plt.ylabel("Velocity (v)", fontsize=20)
         plt.title(f"Phase Space for ω={omega}", fontsize=22)
@@ -208,6 +212,7 @@ def plot_results():
         plt.savefig(os.path.join("homework3/figure/figure3.3", f"taskJ_phase_space_omega_{omega}.png"), dpi=300)  # Save the figure
         plt.show()
 
+    
 # ----------------- Main Execution ----------------- #
 if __name__ == "__main__":
     # Create the figure/figure3.3 directory if it does not exist
