@@ -113,8 +113,8 @@ def compare_leapfrog_rk45(k, x0, v0, dt, T):
     plt.subplot(1, 2, 1)
     plt.plot(x_leapfrog[:1000], v_half_leapfrog[:1000], label='Leapfrog (0-10s)')
     plt.plot(x_leapfrog[-1000:], v_half_leapfrog[-1000:], label='Leapfrog (90-100s)')
-    plt.xlabel("Position (x)", fontsize=20)
-    plt.ylabel("Velocity (v)", fontsize=20)
+    plt.xlabel("x", fontsize=20)
+    plt.ylabel("v", fontsize=20)
     plt.title("Leapfrog Method", fontsize=22)
     plt.legend(fontsize=18)
     plt.grid()
@@ -123,8 +123,8 @@ def compare_leapfrog_rk45(k, x0, v0, dt, T):
     plt.subplot(1, 2, 2)
     plt.plot(x_rk45[:1000], v_rk45[:1000], label='RK45 (0-10s)')
     plt.plot(x_rk45[-1000:], v_rk45[-1000:], label='RK45 (90-100s)')
-    plt.xlabel("Position (x)", fontsize=20)
-    plt.ylabel("Velocity (v)", fontsize=20)
+    plt.xlabel("x", fontsize=20)
+    plt.ylabel("v", fontsize=20)
     plt.title("RK45 Method", fontsize=22)
     plt.legend(fontsize=18)
     plt.grid()
@@ -140,77 +140,87 @@ def plot_results():
 
     # Different k values for Task I
     k_values = [0.5, 1.0, 2.0]
+    
+    # Create a figure with 3 subplots
+    fig, axes = plt.subplots(3, 1, figsize=(10, 12))
 
     # Task I: Position vs. Time
-    plt.figure(figsize=(12, 4))
-    for k in k_values:
+    for i, k in enumerate(k_values):
         t, x, _ = leapfrog_harmonic_oscillator(k, x0, v0, dt, T_taskI)
-        plt.plot(t, x, label=f"k={k}")
-    plt.xlabel("Time (t)", fontsize=13)
-    plt.ylabel("Position (x)", fontsize=13)
-    plt.title("Position vs. Time for Different k Values", fontsize=15)
-    plt.legend(fontsize=13)
-    plt.grid()
-    plt.savefig(os.path.join("homework3/figure/figure3.3", "taskI_position_vs_time.png"), dpi=300)  # Save the figure
-    plt.show()
+        axes[0].plot(t, x, label=f"k={k}")
+    axes[0].set_xlabel("t", fontsize=20)
+    axes[0].set_ylabel("x", fontsize=20)
+    axes[0].set_title("x vs. t", fontsize=22)
+    axes[0].legend(fontsize=16)
+    axes[0].grid()
 
     # Task I: Velocity vs. Time
-    plt.figure(figsize=(12, 4))
-    for k in k_values:
+    for i, k in enumerate(k_values):
         t, _, v_half = leapfrog_harmonic_oscillator(k, x0, v0, dt, T_taskI)
-        plt.plot(t, v_half, label=f"k={k}")
-    plt.xlabel("Time (t)", fontsize=13)
-    plt.ylabel("Velocity (v)", fontsize=13)
-    plt.title("Velocity vs. Time for Different k Values", fontsize=15)
-    plt.legend(fontsize=13)
-    plt.grid()
-    plt.savefig(os.path.join("homework3/figure/figure3.3", "taskI_velocity_vs_time.png"), dpi=300)  # Save the figure
-    plt.show()
+        axes[1].plot(t, v_half, label=f"k={k}")
+    axes[1].set_xlabel("t", fontsize=20)
+    axes[1].set_ylabel("v", fontsize=20)
+    axes[1].set_title("v vs. t", fontsize=22)
+    axes[1].legend(fontsize=16)
+    axes[1].grid()
 
     # Task I: Phase Space (v vs. x)
-    plt.figure(figsize=(12, 4))
-    for k in k_values:
+    for i, k in enumerate(k_values):
         t, x, v_half = leapfrog_harmonic_oscillator(k, x0, v0, dt, T_taskI)
-        plt.plot(x, v_half, label=f"k={k}")
-    plt.xlabel("Position (x)", fontsize=13)
-    plt.ylabel("Velocity (v)", fontsize=13)
-    plt.title("Phase Space (v vs. x) for Different k Values", fontsize=15)
-    plt.legend(fontsize=13)
-    plt.grid()
-    plt.savefig(os.path.join("homework3/figure/figure3.3", "taskI_phase_space.png"), dpi=300)  # Save the figure
+        axes[2].plot(x, v_half, label=f"k={k}")
+    axes[2].set_xlabel("x", fontsize=20)
+    axes[2].set_ylabel("v", fontsize=20)
+    axes[2].set_title("v vs. x", fontsize=22)
+    axes[2].legend(fontsize=16)
+    axes[2].grid()
+
+    # Adjust layout and display
+    plt.subplots_adjust(hspace=0.4)
+    plt.savefig(os.path.join("homework3/figure/figure3.3", "taskI.png"), dpi=300)  # Save the figure
     plt.show()
 
     # Task J: Initial conditions
-    T_taskJ = 50.0  # Task J: T = 50
-    A = 0.5
-    omega_values = [0.8, 1.0, 1.2]  # Near resonance
-    colors = ['orange', 'blue', 'red']
+    T_taskJ = 50.0  # Total simulation time
+    A = 0.5  # Amplitude of the driving force
+    omega_values = [0.8, 1.0, 1.2]  # Driving frequencies near resonance
+    colors = ['orange', 'blue', 'red']  # Colors for different frequencies
 
-    # Task J: Combined Phase Space
-    plt.figure(figsize=(8, 6))
+    # Create a figure with 2 rows and 2 columns
+    fig, axes = plt.subplots(2, 2, figsize=(12, 10))  # 2x2 grid of subplots
+
+    # Plot the **Combined Phase Space** (Top-left subplot)
+    ax = axes[0, 0]  # First subplot (row=0, col=0)
     for i, omega in enumerate(omega_values):
         t, x, v_half = leapfrog_driven_oscillator(1.0, A, omega, x0, v0, dt, T_taskJ)
-        plt.plot(x, v_half, color=colors[i], label=f"ω={omega}")
-    plt.xlabel("Position (x)", fontsize=20)
-    plt.ylabel("Velocity (v)", fontsize=20)
-    plt.title("Combined Phase Space (v vs. x)", fontsize=22)
-    plt.legend(fontsize=16)
-    plt.grid()
-    plt.savefig(os.path.join("homework3/figure/figure3.3", "taskJ_combined_phase_space.png"), dpi=300)  # Save the figure
+        ax.plot(x, v_half, color=colors[i], label=f"ω={omega}")
+
+    ax.set_xlabel("x", fontsize=20)
+    ax.set_ylabel("v", fontsize=20)
+    ax.set_title("Combined Phase Space", fontsize=22)
+    ax.legend(fontsize=16)
+    ax.grid()
+
+    # Plot individual phase space for each ω
+    for i, omega in enumerate(omega_values):
+        row, col = divmod(i + 1, 2)  # Compute the (row, col) index for the subplot
+        ax = axes[row, col]  # Select the corresponding subplot
+
+        # Compute the phase space using Leapfrog method
+        t, x, v_half = leapfrog_driven_oscillator(1.0, A, omega, x0, v0, dt, T_taskJ)
+        ax.plot(x, v_half, color=colors[i], label=f"ω={omega}")
+
+        ax.set_xlabel("x", fontsize=20)
+        ax.set_ylabel("v", fontsize=20)
+        ax.set_title(f"v vs. x (ω={omega})", fontsize=22)
+        ax.legend(fontsize=16)
+        ax.grid()
+
+    # Adjust layout to prevent overlapping of titles and labels
+    plt.subplots_adjust(hspace=0.3)
+
+    # Save the figure
+    plt.savefig(os.path.join("homework3/figure/figure3.3", f"taskJ.png"), dpi=300)  # Save the figure
     plt.show()
-
-    # Task J: Individual Phase Space for each omega
-    for i, omega in enumerate(omega_values):
-        t, x, v_half = leapfrog_driven_oscillator(1.0, A, omega, x0, v0, dt, T_taskJ)
-        plt.figure(figsize=(8, 6))
-        plt.plot(x, v_half, color=colors[i], label=f"ω={omega}")
-        plt.xlabel("Position (x)", fontsize=20)
-        plt.ylabel("Velocity (v)", fontsize=20)
-        plt.title(f"Phase Space for ω={omega}", fontsize=22)
-        plt.legend(fontsize=16)
-        plt.grid()
-        plt.savefig(os.path.join("homework3/figure/figure3.3", f"taskJ_phase_space_omega_{omega}.png"), dpi=300)  # Save the figure
-        plt.show()
 
     
 # ----------------- Main Execution ----------------- #
