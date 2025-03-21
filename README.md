@@ -19,6 +19,13 @@ This repository contains solutions for assignments in the Scientific Computing c
     - `exercise_2.2.py`: Solution for Set 2, Question 2 (Monte Carlo simulation of DLA).
     - `exercise_2.3.py`: Solution for Set 2, Question 3 (Gray-Scott reaction-diffusion model).
   - `figures/`: Stores images and animations generated from simulations.
+- `scientific_computing_homework3/`
+
+  - `src/`: Contains Python scripts for the third assignment.
+    - `exercise3.1.py`: Solution for Set 3, Question 1 (Eigenmodes and eigenfrequencies of membranes using matrix eigenvalue solvers).
+    - `exercise3.2.py`: Solution for Set 3, Question 2 (Steady-state diffusion equation solved using finite difference and direct sparse matrix solver).
+    - `exercise3.3.py`: Solution for Set 3, Question 3 (Time integration using the leapfrog method for particle systems).
+  - `figures/`: Stores images and animations generated from simulations.
 
 ## Usage
 
